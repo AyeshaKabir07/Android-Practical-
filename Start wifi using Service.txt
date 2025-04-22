@@ -1,0 +1,148 @@
+Start Wifi using Service  
+===============================================
+
+Activity_Main.xml
+*************************************************
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/btn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="wifi turns ON"
+        android:layout_marginTop="50dp"
+        android:textSize="25dp"
+        android:layout_marginLeft="40dp"
+        android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/btn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="wifi turns OFF"
+        android:textSize="25dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="150dp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
+
+
+
+*************************************************************
+Activity_Main.JAVA
+****************************************************************
+package com.example.broadcastreceiver;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.net.wifi.WifiManager;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+public class MainActivity extends AppCompatActivity
+{
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Button wifion=findViewById(R.id.btn1);
+        Button wifioff=findViewById(R.id.btn2);
+
+        wifion.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                WifiManager wmgr=(WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                wmgr.setWifiEnabled(true);
+            }
+        });
+        wifioff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WifiManager wmgr=(WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                wmgr.setWifiEnabled(false);
+            }
+        });
+    }
+
+}
+
+
+*******************************************************
+StartServiseWIFI.JAVA
+*********************************************************
+package com.example.broadcastreceiver;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.provider.Settings;
+import android.widget.Toast;
+
+public class StartServiseWifi extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context,Intent intent)
+    {
+        if(isAirplaneModeOn(context.getApplicationContext()))
+        {
+            Toast.makeText(context,"Airplane Mode is on ",Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(context,"Airplane Mode is off",Toast.LENGTH_SHORT).show();
+        }
+    }
+    private boolean isAirplaneModeOn(Context context)
+    {
+        return Settings.System.getInt(context.getContentResolver(),Settings.Global.AIRPLANE_MODE_ON,0)!=0;
+    }
+}
+
+
+************************************************************
+AndroidManifest.JAVA
+**************************************************************
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BroadcastReceiver"
+        tools:targetApi="31">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <receiver android:name=".StartServiseWifi"  android:exported="true">
+        </receiver>
+    </application>
+
+</manifest>
+

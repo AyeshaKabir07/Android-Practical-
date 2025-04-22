@@ -1,0 +1,73 @@
+🛑Sensor
+---------------------------
+
+***XML File***
+-------------------------------------------------------------------------------------------------------
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <TextView
+        android:id="@+id/t1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="92dp"
+        android:layout_marginTop="114dp"
+        android:text="Baga Sensor"/>
+</RelativeLayout>
+
+
+
+***Java File***
+----------------------------------------------------------------
+package com.example.a1stapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
+
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+    SensorManager sm = null;
+    TextView tv1 = null;
+    List l1;
+    SensorEventListener sel = new SensorEventListener() {
+        public void onAccuracyChanged(Sensor sensor, int i) {}
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            float[] values = sensorEvent.values;
+            tv1.setText("x:"+values[0]+"\ny:"+values[1]+"\nz:"+values[2]);
+        }
+    };
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+        tv1 = (TextView) findViewById(R.id.t1);
+        l1 = sm.getSensorList(Sensor.TYPE_ACCELEROMETER);
+        if(l1.size()>0){
+            sm.registerListener(sel,(Sensor) l1.get(0),SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        else{
+            Toast.makeText(getBaseContext(),"Error:No Accemeroleter",Toast.LENGTH_SHORT).show();
+        }
+    }
+    @Override
+    protected void onStop(){
+        if(l1.size()>0){
+            sm.unregisterListener(sel);
+        }
+        super.onStop();
+    }
+}

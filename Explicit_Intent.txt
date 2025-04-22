@@ -1,0 +1,111 @@
+🛑Image Capture 
+----------------------------
+
+***XML File-1***
+-------------------------------------------------------------------------------------------------------
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/e1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter number"
+        android:inputType="number"/>
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/e1"
+        android:text="Factorial"
+        android:textAllCaps="false"
+        android:onClick="display"/>
+</RelativeLayout>
+
+
+
+***Java File-1***
+----------------------------------------------------------------
+package com.example.a1stapp;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+
+public class MainActivity extends AppCompatActivity {
+    EditText e1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        e1=findViewById(R.id.e1);
+    }
+    public void display(View view)
+    {
+        Intent intent=new Intent(MainActivity.this,MainActivity2.class);
+        intent.putExtra("number",e1.getText().toString());
+        startActivity(intent);
+    }
+}
+
+
+
+***XML File-2***
+-------------------------------------------------------------------------------------------------------
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Factorial of number is"/>
+
+</RelativeLayout>
+
+
+
+***Java File-2***
+----------------------------------------------------------------
+package com.example.a1stapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.widget.TextView;
+
+public class MainActivity2 extends AppCompatActivity {
+    TextView text;
+    @SuppressLint("MissingInflatedId")
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main5);
+        Bundle b=getIntent().getExtras();
+        int no=Integer.parseInt(b.getString("number"));
+        long f=1;
+        for(int i=no;i>0;i--)
+        {
+            f=f*i;
+        }
+        text=findViewById(R.id.text);
+        text.setText("Factorial of " +no+ " is : " +f);
+    }
+}
+
+

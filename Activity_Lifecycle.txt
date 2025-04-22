@@ -1,0 +1,72 @@
+🛑Activity Lifecycle 
+-------------------------------
+
+***XML File***
+-------------------------------------------------------------------------------------------------------
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</RelativeLayout>
+
+
+
+***Java File***
+----------------------------------------------------------------
+package com.example.a1stapp;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Log.d("MainActivity","onCreate()Called");
+    }
+    @SuppressLint("MissingSuperCall")
+    @Override
+    protected void onStart(){
+        super.onStart();
+        Log.d("MainActivity","onStart()Called");
+        Toast.makeText(this, "Activity started", Toast.LENGTH_LONG).show();
+    }
+    protected void onResume(){
+        super.onResume();
+        Log.d("MainActivity","onResume()Called");
+        Toast.makeText(this, "Activity Resumed", Toast.LENGTH_LONG).show();
+    }
+    protected void onPause(){
+        super.onPause();
+        Log.d("MainActivity","onPause()Called");
+        Toast.makeText(this, "Activity Paused", Toast.LENGTH_LONG).show();
+    }
+    protected void onStop(){
+        super.onStop();
+        Log.d("MainActivity","onStop()Called");
+        Toast.makeText(this, "Activity stopped", Toast.LENGTH_LONG).show();
+    }
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("MainActivity", "onDestroy()Called");
+        Toast.makeText(this, "Activity destroyed", Toast.LENGTH_LONG).show();
+    }
+}
